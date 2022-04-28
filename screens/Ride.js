@@ -70,7 +70,7 @@ export default class RideScreen extends Component {
             });
         } else if (transactionType === "rented") {
             // Check user availability for start ride 
-            var isEligible =                    ;
+            var isEligible = checkUserEligibilityForStartRide(userId);
 
             if (isEligible) {
                 var { bikeType, userName } = this.state;
@@ -90,7 +90,7 @@ export default class RideScreen extends Component {
             }
         } else {
             // Check user availability for end ride 
-            var isEligible =            ;
+            var isEligible = checkUserEligibilityForEndRide(bikeId, userId);
 
             if (isEligible) {
                 var { bikeType, userName } = this.state;
@@ -183,18 +183,18 @@ export default class RideScreen extends Component {
             });
             // Check and update user eligibility value
             // whether it should be 'true' or 'false'
-            isUserEligible =         ;
+            isUserEligible = false;
             Alert.alert("Invalid user id");
         } else {
             userRef.docs.map(doc => {
                 if (!doc.data().bike_assigned) {
                     // Check and update user eligibility value
                     // whether it should be 'true' or 'false'
-                    isUserEligible =      ;
+                    isUserEligible = true;
                 } else {
                     // Check and update user eligibility value
                     // whether it should be 'true' or 'false'
-                    isUserEligible =      ;
+                    isUserEligible = false;
                     Alert.alert("End the current ride to rent another bike.");
                     this.setState({
                         bikeId: ""
@@ -216,7 +216,7 @@ export default class RideScreen extends Component {
         transactionRef.docs.map(doc => {
             var lastBikeTransaction = doc.data();
             // Check if 'lastBikeTransaction.userid' equals 'userId'. 
-            if (             ) {
+            if (lastBikeTransaction.userId == userId) {
                 isUserEligible = true;
             } else {
                 isUserEligible = false;
@@ -227,7 +227,7 @@ export default class RideScreen extends Component {
             }
         });
         // Return the user's eligibility status
-        return                 ;
+        return isUserEligible;
     };
 
     assignBike = async (bikeId, userId, bikeType, userName) => {
